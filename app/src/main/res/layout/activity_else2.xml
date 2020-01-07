@@ -11,13 +11,34 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Elsea3"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/yourrank"
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
+            android:textColor="#ccf88107"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right|top"
+            android:onClick="mOnPopupClick"
+            android:text="친구 추가" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listview1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="41dp">
+    </ListView>
 
 </RelativeLayout>
 
 
-<!--    tools:showIn="@layout/activity_main"-->
+    <!--    tools:showIn="@layout/activity_main"-->

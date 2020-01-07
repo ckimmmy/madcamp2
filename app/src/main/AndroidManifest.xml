@@ -57,17 +57,9 @@
         <activity android:name=".Elsea3" />
         <activity android:name=".sub" />
         <activity android:name=".SignupActivity" />
+        <activity android:name=".FriendAdd" android:theme = "@android:style/Theme.Dialog"/>
 
 
-        <receiver android:name=".ExampleAppWidgetProvider">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/example_appwidget_info" />
-        </receiver>
     </application>
 
 </manifest>

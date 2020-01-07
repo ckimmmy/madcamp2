@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String ID, String PW){
-        String url = "http://606c7881.ngrok.io/login";
+        String url = "http://1ca89363.ngrok.io/login";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();

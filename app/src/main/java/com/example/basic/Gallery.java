@@ -138,7 +138,7 @@ public class Gallery extends Fragment {
         {
             String absolutePathOfImage = cursor.getString(columnIndex);
             String nameOfFile = cursor.getString(columnDisplayname);
-            saveImageURI(absolutePathOfImage);
+            //saveImageURI(absolutePathOfImage);
             lastIndex = absolutePathOfImage.lastIndexOf(nameOfFile);
             lastIndex = lastIndex >= 0 ? lastIndex : nameOfFile.length() - 1;
 
@@ -156,7 +156,7 @@ public class Gallery extends Fragment {
     }
 
     public void saveImageURI(String URI){
-        String url = "http://606c7881.ngrok.io/gallery";
+        String url = "http://1ca89363.ngrok.io/gallery";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();

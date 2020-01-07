@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".Else3"
+    tools:context=".Else"
     android:clickable="true"
     android:focusableInTouchMode="true"
     >

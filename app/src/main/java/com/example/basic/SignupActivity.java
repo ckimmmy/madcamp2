@@ -150,7 +150,7 @@ public class SignupActivity extends AppCompatActivity {
 //    }
 
     public void requestSignup(String NAME, String ID, String PW){
-        String url = "http://606c7881.ngrok.io/signup";
+        String url = "http://1ca89363.ngrok.io/signup";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();

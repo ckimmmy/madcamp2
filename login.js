@@ -13,48 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-// MongoClient.connect(myurl, {useNewUrlParser: true},function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("mydb");
-
-//   //app.post('/login', (request, response, next) => {
-//     // var post_data = request.body;
-//     // var password = post_data.password;
-//     // var email = post_data.email;
-
-//     dbo.collection("user_collection").find({"email": "hi@naver.com"}).count(function(err, number) {
-//         if (err) throw err;
-        
-//          if (number == 0) {
-//              console.log("Email does not exist");
-//          } else {
-//         //     dbo.collection('user_collection')
-//         //                 .findOne({'email': "hi@naver.com"}, function(err, user){
-//         //                     var saved_password = user.password;
-//         //                     if (saved_password == "1234") {
-//         //                         response.json('Login success!');
-//         //                         console.log('Login success!');
-//         //                     } else {
-//         //                         response.json('Wrong password!');
-//         //                         console.log('Wrong password!');
-//         //                     }
-//         //                 })
-//              console.log("Email does exist");
-//          }
-        
-//         db.close();
-//       });                                                                                                                    
-
-//   //})
-
-  
-//   app.listen(3000);
-//   console.log('Example app listening on port 3000!');
-//   db.close();
-// });
-
 var database;
-
 
 
 http.createServer(app).listen(app.get('port'), function(){
@@ -65,23 +24,11 @@ http.createServer(app).listen(app.get('port'), function(){
   });
 });
 
-// app.get('/user/info', function(req, res){
-//     var dbo = database.db("mydb");
-//     var collection = dbo.collection("user_collection");
-//     collection.find({}).toArray(function(err, docs){
-//         //assert.equal(err, null);
-//         console.log("Found the following records");
-//         res.json(docs);
-//     });
-// });
-
 
 app.use('/login', function(req, res, next) {
 
     console.log('첫 번째 미들웨어 호출 됨');
     
-
-
     var paramId = req.body.id;
     var paramPassword = req.body.password;
     console.log('id : '+paramId+'  pw : '+paramPassword);
@@ -92,6 +39,9 @@ app.use('/login', function(req, res, next) {
 
     var dbo = database.db("mydb");
     var collection = dbo.collection("user_collection");
+    var current_collection = dbo.collection("Current_user");
+
+
     collection.find({"email": String(paramId)}).count(function(err, number){
         //assert.equal(err, null);
         var approve ={'approve_id':'NO','approve_pw':'NO'};
@@ -107,6 +57,9 @@ app.use('/login', function(req, res, next) {
                     approve.approve_pw = 'OK';
                     approve.approve_id = 'OK';
                     console.log('Login success!');
+                    current_collection.insertOne(user, function(err, res) {
+                        console.log("added user to current_user!");
+                    })
                     res.send(approve);
                 } else {
                     //response.json('Wrong password!');
@@ -277,7 +230,7 @@ app.use('/gallery', function(req, res, next) {
     // if(paramPassword == '123') approve.approve_pw = 'OK';
 
     var dbo = database.db("mydb");
-    
+
     var collection = dbo.collection("Gallery");
 
     collection.find({"uri": paramUri}).count(function(err, number){
@@ -309,32 +262,121 @@ app.use('/gallery', function(req, res, next) {
 
 });
 
-// app.post('/login', (request, response, next) => {
-//     var post_data = request.body;
-//     var password = post_data.password;
-//     var email = post_data.email;
+app.use('/summoner', function(req, res, next) {
 
-//     dbo.collection("user_collection").find({"email": "hi@naver.com"}).count(function(err, number) {
-//         if (err) throw err;
-        
-//          if (number == 0) {
-//              console.log("Email does not exist");
-//          } else {
-//             dbo.collection('user_collection')
-//                         .findOne({'email': "hi@naver.com"}, function(err, user){
-//                             var saved_password = user.password;
-//                             if (saved_password == "1234") {
-//                                 response.json('Login success!');
-//                                 console.log('Login success!');
-//                             } else {
-//                                 response.json('Wrong password!');
-//                                 console.log('Wrong password!');
-//                             }
-//                         })
-//              console.log("Email does exist");
-//          }
-        
-//         db.close();
-//       });                                                                                                                    
+    console.log('다섯 번째 미들웨어 호출 됨');
+    
 
-//   });
+    var paramSummoner = req.body.summoner;
+    var paramTier = req.body.virtualtier;
+
+    var dbo = database.db("mydb");
+    var champ_collection = dbo.collection("Champions");
+    var current_collection = dbo.collection("Current_user");
+    var Name;
+    var mySummoner;
+
+    current_collection.findOne({}, function (err, curr) {
+        //console.log(curr.name);
+        try {
+            Name = curr.name;
+
+            
+
+            current_collection.updateOne(curr, {$set: {summoner: paramSummoner, tier: paramTier}},function (err, res) {
+
+                try {
+                    console.log("updated my current_collection");
+                } catch (err) {
+                    console.log("failed");
+                }
+
+                mySummoner = { name: Name, summoner: paramSummoner, tier: paramTier};
+              
+                champ_collection.find({"summoner": paramSummoner}).count(function(err, number){
+
+                    if (number != 0) {
+                        console.log("summoner already exists in database");
+                    } else {
+                        champ_collection.insertOne(mySummoner, function(err, result) {
+                            console.log("added my summoner to database!");
+                        });
+                    }
+
+                });
+                
+            });
+        } catch  (err) {
+            console.log("failed");
+        }
+        
+    });
+
+    
+
+    var approve ={'approve':'OK'};
+
+    res.send(approve);
+
+});
+
+app.use('/bringsummoner', function(req, res, next) {
+
+    console.log('여섯 번째 미들웨어 호출 됨 - name');
+    
+
+    var paramSummoner = req.body.summoner;
+
+    var dbo = database.db("mydb");
+    var champ_collection = dbo.collection("Champions");
+    var current_collection = dbo.collection("Current_user");
+
+    current_collection.findOne({}, function (err, curr) {
+        console.log(curr.name);
+        console.log(curr.summoner);
+        res.send(curr);
+        
+        // var Name = curr.name;
+    });
+
+
+
+});
+
+app.use('/checksummoner', function(req, res, next) {
+
+    console.log('일곱 번째 미들웨어 호출 됨 - name');
+    
+
+    //var paramSummoner = req.body.summoner;
+
+    var dbo = database.db("mydb");
+    var champ_collection = dbo.collection("Champions");
+    var current_collection = dbo.collection("Current_user");
+    var approve ={'approve':'OK'};
+    var Summoner;
+
+    // current_collection.findOne({}, function (err, curr) {
+    //     console.log(curr.name);
+    //     console.log(curr.summoner);
+    //     res.send(curr);
+        
+    //     // var Name = curr.name;
+    // });
+
+    current_collection.findOne({}, function (err, curr) {
+        //console.log(curr.name);
+        try {
+            Summoner = curr.summoner;
+            res.send(approve);
+
+        } catch  (err) {
+            approve.approve = 'NO';
+            res.send(approve);
+            console.log("failed");
+        }
+        
+    });
+    
+
+});

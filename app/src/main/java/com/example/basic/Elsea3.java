@@ -3,130 +3,160 @@ package com.example.basic;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class Elsea3 extends AppCompatActivity {
 
     String testString=null;
     String Tier = null;
+    String name;
+    //= getIntent().getStringExtra("name");
+    String summoner;
+    JSONObject jsonObject;
+    String friendnickname = null;
+    String friendtier = null;
+    TextView yourrank;
+
+    ArrayList<String> namearr = new ArrayList<String>();
+    ArrayList<Integer> tier1arr = new ArrayList<Integer>();
+    ArrayList<String> nicknamearr = new ArrayList<String>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_else2);
-
-        ArrayList<String> namearr = new ArrayList<String>();
-        ArrayList<Integer> tier1arr = new ArrayList<Integer>();
-        ArrayList<String> nicknamearr = new ArrayList<String>();
-
-        /*
-
-
-        여기서 서버에서 서버 DB로부터 이름하고 티어 순서대로 채우기
-
-
-         */
-
-        String[] nametest = new String[] {"송강호", "아이유", "박보영", "이병헌", "공유", "신혜선", "설현"};
-        int[] tiertest1 = new int[]{62, 21, 42, 63, 73, 93, 52};
-        String[] nicknametest = new String[] {"너만오면고", "매캠화이팅", "공부합시다", "태평소국밥3", "하하하321", "AOA최고", "콘트라베이스"};
-
-        //위에거 예시들은 거
-
-        //CHALLENGER: 1
-        //GRANDMASTER: 2
-        //MASTER: 3
-        //DIAMOND: 4
-        //PLATINUM: 5
-        //GOLD: 6
-        //SILVER: 7
-        //BRONZE: 8
-        //IRON: 9
-        //십의자리가 티어. 일의자리는 티어 내 랭크(1~4)
-
-
-        for(int i=0; i<=(nametest.length)-1;i++) {
-            namearr.add(nametest[i]);
-            tier1arr.add(tiertest1[i]);
-            nicknamearr.add(nicknametest[i]);
-        }
-
-        String name = getIntent().getStringExtra("name");
-        String summoner = getIntent().getStringExtra("summoner");
-
-
-        ExampleThread thread = new ExampleThread();
-        thread.start();
-        try{
-            thread.join();
-        }catch(InterruptedException e)
+        try
         {
-            }
-
-
-        namearr.add(name);
-        tier1arr.add(Getvirtualtier(testString));
-        nicknamearr.add(summoner);
-        //이게 받은 list들에서 젤 끝에 내 정보 추가한거. 이 arraylist들 서버에 올리면 될듯.
-
-
-        Savedata3 [] letsort = new Savedata3[namearr.size()];
-
-        for(int i=0;i<=(namearr.size()-1);i++){
-            letsort[i]=new Savedata3(namearr.get(i), tier1arr.get(i), nicknamearr.get(i));
+            this.getSupportActionBar().hide();
         }
-        Arrays.sort(letsort);
+        catch (NullPointerException e){}
+        setContentView(R.layout.activity_else2);
+        yourrank = (TextView)findViewById(R.id.yourrank);
 
-
-        ListView listview;
-        ListViewAdapter3 adapter;
-        adapter = new ListViewAdapter3();
-        listview = (ListView) findViewById(R.id.listview1);
-        listview.setAdapter(adapter);
-
-        for(int i=0; i<=(letsort.length)-1;i++){
-            if((letsort[i].tierc)/10 == 1){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.challenger), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 2){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.grandmaster), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 3){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.master), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 4){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.diamond), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 5){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.platinum), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 6){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.gold), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 7){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.silver), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else if((letsort[i].tierc)/10 == 8){
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.bronze), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-            else {
-                adapter.addItem(ContextCompat.getDrawable(this, R.drawable.iron), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
-            }
-        }
-
-
+        bringName();
 
     }
 
 
+    public void mOnPopupClick(View v){
+        System.out.println("abcd");
+        Intent intent = new Intent(this, FriendAdd.class);
+        startActivityForResult(intent, 1);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            if(resultCode==RESULT_OK){
+                String friendname = data.getStringExtra("nameresult");
+                friendnickname = data.getStringExtra("nicknameresult");
+
+
+                Thread2 thread = new Thread2();
+                thread.start();
+                try{
+                    thread.join();
+                }catch(InterruptedException e)
+                {
+                }
+                System.out.println(friendtier);
+                namearr.add(friendname);
+                tier1arr.add(Getvirtualtier(friendtier));
+                nicknamearr.add(friendnickname);
+
+                Savedata3 [] letsort = new Savedata3[namearr.size()];
+
+                for(int i=0;i<=(namearr.size()-1);i++){
+                    letsort[i]=new Savedata3(namearr.get(i), tier1arr.get(i), nicknamearr.get(i));
+                }
+                Arrays.sort(letsort);
+
+                ListView listview;
+                ListViewAdapter3 adapter;
+                adapter = new ListViewAdapter3();
+                listview = (ListView) findViewById(R.id.listview1);
+                listview.setAdapter(adapter);
+
+                //String summoner = getIntent().getStringExtra("summoner");
+                for(int i=0; i<=(letsort.length)-1; i++){
+                    if(summoner.equals(letsort[i].nicknamec)){
+                        //TextView yourrank = (TextView)findViewById(R.id.yourrank);
+                        yourrank.setText("당신의 순위는"+" "+ Integer.toString(i+1)+"위 입니다"+"(전체 "+Integer.toString(letsort.length)+"명)");
+                    }
+                    else;
+                }
+
+                for(int i=0; i<=(letsort.length)-1;i++){
+                    if((letsort[i].tierc)/10 == 1){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.challenger), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 2){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.grandmaster), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 3){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.master), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 4){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.diamond), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 5){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.platinum), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 6){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.gold), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 7){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.silver), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else if((letsort[i].tierc)/10 == 8){
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.bronze), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                    else {
+                        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.iron), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                    }
+                }
+            }
+        }
+    }
+
+    private class Thread2 extends Thread{
+        Get_Tier3 abc = new Get_Tier3();
+        public void run(){
+            try{
+                friendtier = abc.AsyncExample(friendnickname);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private class ExampleThread extends Thread{
 
-        String summoner = getIntent().getStringExtra("summoner");
+        //String summoner = getIntent().getStringExtra("summoner");
         Get_Tier3 test = new Get_Tier3();
 
         public void run(){
@@ -240,8 +270,175 @@ public class Elsea3 extends AppCompatActivity {
         }
         return tier1 + " " + tier2;
     }
-}
 
+
+    void easyToast(String str){
+        Toast.makeText(getApplicationContext(),str,Toast.LENGTH_SHORT).show();
+    }
+
+    public void bringName(){
+        String url = "http://1ca89363.ngrok.io/bringsummoner";
+        //String name;
+
+        //JSON형식으로 데이터 통신을 진행합니다!
+        JSONObject testjson = new JSONObject();
+        try {
+            //입력해둔 edittext의 id와 pw값을 받아와 put해줍니다 : 데이터를 json형식으로 바꿔 넣어주었습니다.
+            testjson.put("summoner", "hi");
+            String jsonString = testjson.toString(); //완성된 json 포맷
+
+            //이제 전송해볼까요?
+            final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,testjson, new Response.Listener<JSONObject>() {
+
+                //데이터 전달을 끝내고 이제 그 응답을 받을 차례입니다.
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        //받은 json형식의 응답을 받아
+                        jsonObject = new JSONObject(response.toString());
+
+                        //key값에 따라 value값을 쪼개 받아옵니다.
+
+                        name = response.getString("name");
+                        summoner = response.getString("summoner");
+
+                        //System.out.println("1");
+
+
+//
+//                        ArrayList<String> namearr = new ArrayList<String>();
+//                        ArrayList<Integer> tier1arr = new ArrayList<Integer>();
+//                        ArrayList<String> nicknamearr = new ArrayList<String>();
+
+                        /*
+                        여기서 서버에서 서버 DB로부터 이름하고 티어 순서대로 채우기
+                         */
+
+                        String[] nametest = new String[] {"송강호", "아이유", "박보영", "이병헌", "공유", "신혜선", "설현"};
+                        int[] tiertest1 = new int[]{62, 21, 42, 63, 73, 93, 52};
+                        String[] nicknametest = new String[] {"너만오면고", "매캠화이팅", "공부합시다", "태평소국밥3", "하하하321", "AOA최고", "콘트라베이스"};
+
+                        //위에거 예시들은 거
+
+                        //CHALLENGER: 1
+                        //GRANDMASTER: 2
+                        //MASTER: 3
+                        //DIAMOND: 4
+                        //PLATINUM: 5
+                        //GOLD: 6
+                        //SILVER: 7
+                        //BRONZE: 8
+                        //IRON: 9
+                        //십의자리가 티어. 일의자리는 티어 내 랭크(1~4)
+
+                        for(int i=0; i<=(nametest.length)-1;i++) {
+                            namearr.add(nametest[i]);
+                            tier1arr.add(tiertest1[i]);
+                            nicknamearr.add(nicknametest[i]);
+                        }
+
+                        //System.out.println("2");
+                        ExampleThread thread = new ExampleThread();
+                        thread.start();
+                        try{
+                            thread.join();
+                        }catch(InterruptedException e)
+                        {
+                        }
+
+
+                        //System.out.println("3");
+
+                        namearr.add(name);
+                        tier1arr.add(Getvirtualtier(testString));
+                        nicknamearr.add(summoner);
+                        //이게 받은 list들에서 젤 끝에 내 정보 추가한거. 이 arraylist들 서버에 올리면 될듯.
+
+                        //System.out.println("4");
+                        Savedata3 [] letsort = new Savedata3[namearr.size()];
+
+                        for(int i=0;i<=(namearr.size()-1);i++){
+                            letsort[i]=new Savedata3(namearr.get(i), tier1arr.get(i), nicknamearr.get(i));
+                        }
+                        Arrays.sort(letsort);
+//
+                        //System.out.println("5");
+                        ListView listview;
+                        ListViewAdapter3 adapter;
+                        adapter = new ListViewAdapter3();
+                        listview = (ListView) findViewById(R.id.listview1);
+                        listview.setAdapter(adapter);
+
+                        for(int i=0; i<=(letsort.length)-1; i++){
+                            if(summoner.equals(letsort[i].nicknamec)){
+                                //yourrank = (TextView)findViewById(R.id.yourrank);
+                                yourrank.setText("당신의 순위는"+" "+ Integer.toString(i+1)+"위 입니다"+"(전체 "+Integer.toString(letsort.length)+"명)");
+                            }
+                        }
+
+                        //System.out.println("6");
+
+                        for(int i=0; i<=(letsort.length)-1;i++){
+                            if((letsort[i].tierc)/10 == 1){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.challenger), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 2){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.grandmaster), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 3){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.master), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 4){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.diamond), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 5){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.platinum), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 6){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.gold), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 7){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.silver), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else if((letsort[i].tierc)/10 == 8){
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.bronze), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                            else {
+                                adapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.iron), Integer.toString(i+1) + "위", letsort[i].namec, reversegettier(letsort[i].tierc), letsort[i].nicknamec);
+                            }
+                        }
+
+
+
+                    } catch (Exception e) {
+//                        easyToast("FAILLLLLLL");
+//                        System.out.println("BLAHBLAHBLAH");
+                        e.printStackTrace();
+                    }
+
+                }
+                //서버로 데이터 전달 및 응답 받기에 실패한 경우 아래 코드가 실행됩니다.
+
+
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            requestQueue.add(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+}
 
 
 
