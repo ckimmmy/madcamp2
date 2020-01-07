@@ -142,17 +142,17 @@ public class Else extends Fragment {
         JSONObject testjson = new JSONObject();
         try {
             //입력해둔 edittext의 id와 pw값을 받아와 put해줍니다 : 데이터를 json형식으로 바꿔 넣어주었습니다.
-//            Else.ExampleThread thread = new Else.ExampleThread();
-//            thread.start();
-//            try{
-//                thread.join();
-//            }catch(InterruptedException e)
-//            {
-//            }
+            Else.ExampleThread thread = new Else.ExampleThread();
+            thread.start();
+            try{
+                thread.join();
+            }catch(InterruptedException e)
+            {
+            }
 
-            //Integer virtualtier = Getvirtualtier(SUMMONER);
+            Integer virtualtier = Getvirtualtier(testString);
 
-            //testjson.put("tier", virtualtier.toString());
+            testjson.put("tier", virtualtier);
             testjson.put("summoner", SUMMONER);
             String jsonString = testjson.toString(); //완성된 json 포맷
 

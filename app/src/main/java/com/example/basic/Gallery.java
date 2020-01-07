@@ -61,7 +61,7 @@ public class Gallery extends Fragment {
         // Required empty public constructor
     }
 
-    private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 6;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,22 +71,22 @@ public class Gallery extends Fragment {
 
         int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (shouldShowRequestPermissionRationale(
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Explain to the user why we need to read the contacts
-            }
-
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-
-            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-            // app-defined int constant that should be quite unique
-
-        }
+//        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Should we show an explanation?
+//            if (shouldShowRequestPermissionRationale(
+//                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                // Explain to the user why we need to read the contacts
+//            }
+//
+//            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+//
+//            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+//            // app-defined int constant that should be quite unique
+//
+//        }
         //tedPermission();
 
         RecyclerView recyclerView = (RecyclerView) galleryView.findViewById(R.id.gallery);

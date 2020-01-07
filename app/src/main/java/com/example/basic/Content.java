@@ -151,15 +151,15 @@ public class Content extends Fragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        1);
-            }
-        }
+//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+//
+//            } else {
+//                ActivityCompat.requestPermissions(getActivity(),
+//                        new String[]{Manifest.permission.READ_CONTACTS},
+//                        1);
+//            }
+//        }
         List<PhoneBook> phoneBooks = getContacts(getActivity());
         int leng = phoneBooks.size();
         for (int k = 0; k < leng; k++) {

@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,6 +39,7 @@ public class Elsea3 extends AppCompatActivity {
     String friendnickname = null;
     String friendtier = null;
     TextView yourrank;
+    Integer myTier;
 
     ArrayList<String> namearr = new ArrayList<String>();
     ArrayList<Integer> tier1arr = new ArrayList<Integer>();
@@ -298,12 +300,31 @@ public class Elsea3 extends AppCompatActivity {
                         //받은 json형식의 응답을 받아
                         jsonObject = new JSONObject(response.toString());
 
+
                         //key값에 따라 value값을 쪼개 받아옵니다.
+                        JSONObject mydata = response.getJSONObject("user");
+                        JSONArray friendsdata = response.getJSONArray("friends");
 
-                        name = response.getString("name");
-                        summoner = response.getString("summoner");
+//                        name = response.getString("name");
+//                        summoner = response.getString("summoner");
+//                        myTier = response.getInt("tier");
+                        name = mydata.getString("name");
+                        summoner = mydata.getString("summoner");
+                        myTier = mydata.getInt("tier");
 
-                        //System.out.println("1");
+                        //ArrayList<JSONObject> friends_list = friendsdata.getJSONArray
+
+                        for(int j=0; j< friendsdata.length() ;j++) {
+                            JSONObject oneUser = friendsdata.getJSONObject(j);
+                            namearr.add(oneUser.getString("name"));
+                            //System.out.println("------------------------------------------------------------------------" + oneUser.getString("name"));
+                            tier1arr.add(oneUser.getInt("tier"));
+                            //System.out.println("------------------------------------------------------------------------" + oneUser.getInt("tier"));
+                            nicknamearr.add(oneUser.getString("summoner"));
+                        }
+
+
+                        System.out.println("1");
 
 
 //
@@ -315,9 +336,6 @@ public class Elsea3 extends AppCompatActivity {
                         여기서 서버에서 서버 DB로부터 이름하고 티어 순서대로 채우기
                          */
 
-                        String[] nametest = new String[] {"송강호", "아이유", "박보영", "이병헌", "공유", "신혜선", "설현"};
-                        int[] tiertest1 = new int[]{62, 21, 42, 63, 73, 93, 52};
-                        String[] nicknametest = new String[] {"너만오면고", "매캠화이팅", "공부합시다", "태평소국밥3", "하하하321", "AOA최고", "콘트라베이스"};
 
                         //위에거 예시들은 거
 
@@ -332,27 +350,27 @@ public class Elsea3 extends AppCompatActivity {
                         //IRON: 9
                         //십의자리가 티어. 일의자리는 티어 내 랭크(1~4)
 
-                        for(int i=0; i<=(nametest.length)-1;i++) {
-                            namearr.add(nametest[i]);
-                            tier1arr.add(tiertest1[i]);
-                            nicknamearr.add(nicknametest[i]);
-                        }
+//                        for(int i=0; i<=(nametest.length)-1;i++) {
+//                            namearr.add(nametest[i]);
+//                            tier1arr.add(tiertest1[i]);
+//                            nicknamearr.add(nicknametest[i]);
+//                        }
 
                         //System.out.println("2");
-                        ExampleThread thread = new ExampleThread();
-                        thread.start();
-                        try{
-                            thread.join();
-                        }catch(InterruptedException e)
-                        {
-                        }
+//                        ExampleThread thread = new ExampleThread();
+//                        thread.start();
+//                        try{
+//                            thread.join();
+//                        }catch(InterruptedException e)
+//                        {
+//                        }
 
 
                         //System.out.println("3");
-
-                        namearr.add(name);
-                        tier1arr.add(Getvirtualtier(testString));
-                        nicknamearr.add(summoner);
+//
+//                        namearr.add(name);
+//                        tier1arr.add(myTier);
+//                        nicknamearr.add(summoner);
                         //이게 받은 list들에서 젤 끝에 내 정보 추가한거. 이 arraylist들 서버에 올리면 될듯.
 
                         //System.out.println("4");

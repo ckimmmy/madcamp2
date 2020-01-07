@@ -268,13 +268,14 @@ app.use('/summoner', function(req, res, next) {
     
 
     var paramSummoner = req.body.summoner;
-    var paramTier = req.body.virtualtier;
+    var paramTier = req.body.tier;
 
     var dbo = database.db("mydb");
     var champ_collection = dbo.collection("Champions");
     var current_collection = dbo.collection("Current_user");
     var Name;
     var mySummoner;
+    var approve ={'approve':'NO'};
 
     current_collection.findOne({}, function (err, curr) {
         //console.log(curr.name);
@@ -287,6 +288,7 @@ app.use('/summoner', function(req, res, next) {
 
                 try {
                     console.log("updated my current_collection");
+                    console.log(paramTier);
                 } catch (err) {
                     console.log("failed");
                 }
@@ -297,9 +299,12 @@ app.use('/summoner', function(req, res, next) {
 
                     if (number != 0) {
                         console.log("summoner already exists in database");
+                        res.send(approve);
                     } else {
                         champ_collection.insertOne(mySummoner, function(err, result) {
                             console.log("added my summoner to database!");
+                            approve ={'approve':'OK', user: mySummoner};
+                            res.send(approve);
                         });
                     }
 
@@ -308,13 +313,14 @@ app.use('/summoner', function(req, res, next) {
             });
         } catch  (err) {
             console.log("failed");
+            res.send(approve);
         }
         
     });
 
     
 
-    var approve ={'approve':'OK'};
+    // var approve ={'approve':'OK'};
 
     res.send(approve);
 
@@ -322,7 +328,7 @@ app.use('/summoner', function(req, res, next) {
 
 app.use('/bringsummoner', function(req, res, next) {
 
-    console.log('여섯 번째 미들웨어 호출 됨 - name');
+    console.log('여섯 번째 미들웨어 호출 ');
     
 
     var paramSummoner = req.body.summoner;
@@ -330,14 +336,52 @@ app.use('/bringsummoner', function(req, res, next) {
     var dbo = database.db("mydb");
     var champ_collection = dbo.collection("Champions");
     var current_collection = dbo.collection("Current_user");
-
-    current_collection.findOne({}, function (err, curr) {
-        console.log(curr.name);
-        console.log(curr.summoner);
-        res.send(curr);
+    current_collection.findOne({}, function(err, curr) {
+        champ_collection.find({}).toArray(function(err, result) {
+            // console.log(curr.name);
+            // console.log(curr.summoner);
+            //JSON.stringify({ a: 1 })
+            //res.send(JSON.stringify({"mine": curr, "friends": champ_collection}));
+            //res.send({mine: curr, friends: champ_collection});
+            //res.send(curr);
+            //console.log(result);
+            //res.send(result);
+            
+            // var Name = curr.name;
+            res.send({user: curr, friends: result});
+        });
         
-        // var Name = curr.name;
     });
+
+    
+
+
+
+});
+
+app.use('/bringfriends', function(req, res, next) {
+
+    console.log('friendssss ');
+    
+
+    //var paramSummoner = req.body.summoner;
+
+    var dbo = database.db("mydb");
+    var champ_collection = dbo.collection("Champions");
+    //var current_collection = dbo.collection("Current_user");
+
+    console.log(champ_collection);
+    res.send(champ_collection);
+    // current_collection.findOne({}, function (err, curr) {
+    //     console.log(curr.name);
+    //     console.log(curr.summoner);
+    //     //JSON.stringify({ a: 1 })
+    //     //res.send(JSON.stringify({"mine": curr, "friends": champ_collection}));
+    //     //res.send({mine: curr, friends: champ_collection});
+    //     res.send(curr);
+        
+    //     // var Name = curr.name;
+    // });
 
 
 
@@ -356,19 +400,20 @@ app.use('/checksummoner', function(req, res, next) {
     var approve ={'approve':'OK'};
     var Summoner;
 
-    // current_collection.findOne({}, function (err, curr) {
-    //     console.log(curr.name);
-    //     console.log(curr.summoner);
-    //     res.send(curr);
-        
-    //     // var Name = curr.name;
-    // });
-
     current_collection.findOne({}, function (err, curr) {
         //console.log(curr.name);
         try {
             Summoner = curr.summoner;
-            res.send(approve);
+            console.log(Summoner);
+            if (Summoner == undefined) {
+                var approve ={'approve':'OK'};
+                approve.approve = 'NO';
+                res.send(approve);
+            } else {
+                var approve ={'approve':'OK', user: curr};
+                res.send(approve);
+            }
+            
 
         } catch  (err) {
             approve.approve = 'NO';
