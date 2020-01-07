@@ -31,11 +31,11 @@ public class ExampleAppWidgetProvider extends AppWidgetProvider {
             SharedPreferences  a = PreferenceManager.getDefaultSharedPreferences(context);
             int i = a.getInt("i", 0);
             if(i >= 8){
-                views.setTextViewText(R.id.tv_text, "You drank " + String.format("%d", i)+" cups of water!\nGreat Job!");
+                views.setTextViewText(R.id.tv_text, String.format("%d", i)+"잔의 물을 마셨구나!\n참 잘했어요!");
             }
             else{
                 int j = 8-i;
-                views.setTextViewText(R.id.tv_text, "You drank " + String.format("%d", i)+" cups of water!\n"+"Drink " + String.format("%d", j) + " more cups!");
+                views.setTextViewText(R.id.tv_text, String.format("%d", i)+"잔의 물을 마셨구나!\n"+String.format("%d", j)+"잔의 물을 더 마시세요!");
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views);

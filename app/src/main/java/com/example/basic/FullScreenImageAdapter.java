@@ -2,22 +2,40 @@ package com.example.basic;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
     private Activity _activity;
+    //ArrayList<String> uriList = getImage();
+
+    public ArrayList<Cell> get_galleryList() {
+        return _galleryList;
+    }
+
+    public void set_galleryList(ArrayList<Cell> _galleryList) {
+        this._galleryList = _galleryList;
+    }
+
     private ArrayList<Cell> _galleryList;
     private LayoutInflater inflater;
 
@@ -67,10 +85,27 @@ public class FullScreenImageAdapter extends PagerAdapter {
         Integer image_id = _activity.getIntent().getIntExtra("picture", 0);
 
 
+        ArrayList<String> uriList = getImage();
+        String fullUri = uriList.get(position);
+        Uri myUri = Uri.parse(fullUri);
+
+        //Bitmap before = galleryList.get(i).getBitmap();
+        //Bitmap bitmap2 = Bitmap.createScaledBitmap(before,  600 ,600, true);
+        //Bitmap after = BitmapFactory.decodeByteArray(before, 0, before.getHeight());
+        //viewHolder.img.setImageBitmap(bitmap2);
+
+        Glide
+                .with(_activity)
+                .load(new File(myUri.getPath()))
+                .centerCrop()
+                .into(imgDisplay);
+
+
+
         TouchImageView image = (TouchImageView) container.findViewById(R.id.imgDisplay);
 
-        Drawable drawable = _activity.getResources().getDrawable(images_ids[position]);
-        imgDisplay.setImageDrawable(drawable);
+        //Drawable drawable = _activity.getResources().getDrawable(images_ids[position]);
+        //imgDisplay.setImageDrawable(drawable);
 
 //        BitmapFactory.Options options = new BitmapFactory.Options();
 //        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -94,5 +129,37 @@ public class FullScreenImageAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView((RelativeLayout) object);
 
+    }
+
+    private ArrayList<String> getImage()
+    {
+        ArrayList<String> result = new ArrayList<>();
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = { MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME };
+
+        Cursor cursor = _activity.getApplicationContext().getContentResolver(). query(uri, projection, null, null, MediaStore.MediaColumns.DATE_ADDED + " desc");
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        int columnDisplayname = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
+
+        int lastIndex;
+        while (cursor.moveToNext())
+        {
+            String absolutePathOfImage = cursor.getString(columnIndex);
+            String nameOfFile = cursor.getString(columnDisplayname);
+            //saveImageURI(absolutePathOfImage);
+            lastIndex = absolutePathOfImage.lastIndexOf(nameOfFile);
+            lastIndex = lastIndex >= 0 ? lastIndex : nameOfFile.length() - 1;
+
+            if (!TextUtils.isEmpty(absolutePathOfImage))
+            {
+                result.add(absolutePathOfImage);
+            }
+        }
+
+        for (String string : result)
+        {
+            Log.i("Gallery.java | getImage", "|" + string + "|");
+        }
+        return result;
     }
 }

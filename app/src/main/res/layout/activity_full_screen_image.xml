@@ -7,12 +7,12 @@
     android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
     tools:context=".FullScreenImageActivity">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/fullScreenimageView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_centerVertical ="true"-->
-<!--        android:layout_centerHorizontal ="true" />-->
+    <!--    <ImageView-->
+    <!--        android:id="@+id/fullScreenimageView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_centerVertical ="true"-->
+    <!--        android:layout_centerHorizontal ="true" />-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"

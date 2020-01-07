@@ -25,6 +25,17 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Content extends Fragment {
     private Button plus;
@@ -70,12 +81,70 @@ public class Content extends Fragment {
                 phoneBook.setName(name);
                 phoneBook.setTel(number);
 
+                //addContactDB(name, number);
+
                 datas.add(phoneBook);
             }
         }
         // 데이터 계열은 반드시 닫아줘야 한다.
         cursor.close();
         return datas;
+    }
+
+    public void addContactDB(String NAME, String NUMBER){
+        String url = "http://606c7881.ngrok.io/contacts";
+
+        //JSON형식으로 데이터 통신을 진행합니다!
+        JSONObject testjson = new JSONObject();
+        try {
+            //입력해둔 edittext의 id와 pw값을 받아와 put해줍니다 : 데이터를 json형식으로 바꿔 넣어주었습니다.
+            testjson.put("name", NAME);
+            testjson.put("number", NUMBER);
+            String jsonString = testjson.toString(); //완성된 json 포맷
+
+            //이제 전송해볼까요?
+            final RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url,testjson, new Response.Listener<JSONObject>() {
+
+                //데이터 전달을 끝내고 이제 그 응답을 받을 차례입니다.
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        //받은 json형식의 응답을 받아
+                        JSONObject jsonObject = new JSONObject(response.toString());
+
+                        //key값에 따라 value값을 쪼개 받아옵니다.
+                        String resultId = jsonObject.getString("approve_id");
+                        String resultPassword = jsonObject.getString("approve_pw");
+
+                        if(resultId.equals("OK") & resultPassword.equals("OK")){
+                            Toast.makeText(getContext(),"Success",Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            easyToast("A contact with the following number already exists!");
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                //서버로 데이터 전달 및 응답 받기에 실패한 경우 아래 코드가 실행됩니다.
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            requestQueue.add(jsonObjectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void easyToast(String str){
+        Toast.makeText(getContext(),str,Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -94,6 +163,10 @@ public class Content extends Fragment {
         List<PhoneBook> phoneBooks = getContacts(getActivity());
         int leng = phoneBooks.size();
         for (int k = 0; k < leng; k++) {
+            String addname = phoneBooks.get(k).getname();
+            String addnumber = phoneBooks.get(k).getTel();
+            addContactDB(addname, addnumber);
+
             named.add(phoneBooks.get(k).getname());
             numberd.add(phoneBooks.get(k).getTel());
 //
@@ -107,16 +180,15 @@ public class Content extends Fragment {
 
 
         //새 연락처
-/*
-        Intent intent =getActivity().getIntent();
-        String str1 =intent.getStringExtra("fn");
-        String str3 =intent.getStringExtra("pn");
-        if (str1!=null) {
-            named.add(str1);
-            numberd.add(str3);
-        }
 
- */
+//        Intent intent =getActivity().getIntent();
+//        String str1 =intent.getStringExtra("fn");
+//        String str3 =intent.getStringExtra("pn");
+//
+//        if (str1!=null) {
+//            named.add(str1);
+//            numberd.add(str3);
+//        }
 
         ArrayList<ItemData> oData = new ArrayList<>();
 
@@ -148,6 +220,7 @@ public class Content extends Fragment {
 
         return view;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
