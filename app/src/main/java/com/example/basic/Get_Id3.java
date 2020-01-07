@@ -18,12 +18,19 @@ public class Get_Id3 {
         ApiConfig config = new ApiConfig().setKey("RGAPI-73b2c288-e457-425e-9600-2579688db1ff");
         RiotApi api = new RiotApi(config);
 
-        Summoner summoner = api.getSummonerByName(Platform.KR, s);
-        String MyId= null;
-        MyId = summoner.getId();
+        try {
+            Summoner summoner = api.getSummonerByName(Platform.KR, s);
+            String MyId= null;
+            MyId = summoner.getId();
+            return MyId;
+        } catch (RiotApiException e){
+            System.out.println("------------------------------------------------------------------------summonernukll");
+        }
+
+
 //        LeagueList leagueList= api.getLeagueById(Platform.KR, MyId);
 //        System.out.println(leagueList);
-        return MyId;
+        return "null";
     }
 //    public String MyId= summoner.getId();
 

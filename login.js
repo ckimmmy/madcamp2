@@ -338,24 +338,11 @@ app.use('/bringsummoner', function(req, res, next) {
     var current_collection = dbo.collection("Current_user");
     current_collection.findOne({}, function(err, curr) {
         champ_collection.find({}).toArray(function(err, result) {
-            // console.log(curr.name);
-            // console.log(curr.summoner);
-            //JSON.stringify({ a: 1 })
-            //res.send(JSON.stringify({"mine": curr, "friends": champ_collection}));
-            //res.send({mine: curr, friends: champ_collection});
-            //res.send(curr);
-            //console.log(result);
-            //res.send(result);
-            
-            // var Name = curr.name;
+
             res.send({user: curr, friends: result});
         });
         
     });
-
-    
-
-
 
 });
 
@@ -423,5 +410,42 @@ app.use('/checksummoner', function(req, res, next) {
         
     });
     
+
+});
+
+app.use('/addfriend', function(req, res, next) {
+
+    console.log('여덟 번째 미들웨어 호출');
+    
+
+    var paramName = req.body.name;
+    var paramSummoner = req.body.summoner;
+    var paramTier = req.body.tier;
+    
+
+    //var paramSummoner = req.body.summoner;
+
+    var dbo = database.db("mydb");
+    var champ_collection = dbo.collection("Champions");
+    //var current_collection = dbo.collection("Current_user");
+    var approve ={'approve':'OK'};
+
+
+    champ_collection.insertOne({name: paramName, summoner: paramSummoner, tier: paramTier}, function (err, curr) {
+        //console.log(curr.name);
+        try {
+
+            res.send(approve);
+
+            
+
+        } catch  (err) {
+            approve.approve = 'NO';
+            res.send(approve);
+            console.log("failed");
+        }
+        
+    });
+
 
 });

@@ -64,7 +64,6 @@ public class Elsea3 extends AppCompatActivity {
 
 
     public void mOnPopupClick(View v){
-        System.out.println("abcd");
         Intent intent = new Intent(this, FriendAdd.class);
         startActivityForResult(intent, 1);
     }
@@ -85,6 +84,7 @@ public class Elsea3 extends AppCompatActivity {
                 {
                 }
                 System.out.println(friendtier);
+                System.out.println("------------------------------------------------------------------------entered");
                 namearr.add(friendname);
                 tier1arr.add(Getvirtualtier(friendtier));
                 nicknamearr.add(friendnickname);
@@ -324,55 +324,6 @@ public class Elsea3 extends AppCompatActivity {
                         }
 
 
-                        System.out.println("1");
-
-
-//
-//                        ArrayList<String> namearr = new ArrayList<String>();
-//                        ArrayList<Integer> tier1arr = new ArrayList<Integer>();
-//                        ArrayList<String> nicknamearr = new ArrayList<String>();
-
-                        /*
-                        여기서 서버에서 서버 DB로부터 이름하고 티어 순서대로 채우기
-                         */
-
-
-                        //위에거 예시들은 거
-
-                        //CHALLENGER: 1
-                        //GRANDMASTER: 2
-                        //MASTER: 3
-                        //DIAMOND: 4
-                        //PLATINUM: 5
-                        //GOLD: 6
-                        //SILVER: 7
-                        //BRONZE: 8
-                        //IRON: 9
-                        //십의자리가 티어. 일의자리는 티어 내 랭크(1~4)
-
-//                        for(int i=0; i<=(nametest.length)-1;i++) {
-//                            namearr.add(nametest[i]);
-//                            tier1arr.add(tiertest1[i]);
-//                            nicknamearr.add(nicknametest[i]);
-//                        }
-
-                        //System.out.println("2");
-//                        ExampleThread thread = new ExampleThread();
-//                        thread.start();
-//                        try{
-//                            thread.join();
-//                        }catch(InterruptedException e)
-//                        {
-//                        }
-
-
-                        //System.out.println("3");
-//
-//                        namearr.add(name);
-//                        tier1arr.add(myTier);
-//                        nicknamearr.add(summoner);
-                        //이게 받은 list들에서 젤 끝에 내 정보 추가한거. 이 arraylist들 서버에 올리면 될듯.
-
                         //System.out.println("4");
                         Savedata3 [] letsort = new Savedata3[namearr.size()];
 
@@ -430,8 +381,7 @@ public class Elsea3 extends AppCompatActivity {
 
 
                     } catch (Exception e) {
-//                        easyToast("FAILLLLLLL");
-//                        System.out.println("BLAHBLAHBLAH");
+
                         e.printStackTrace();
                     }
 

@@ -6,8 +6,10 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import okhttp3.internal.Util;
 
@@ -18,6 +20,9 @@ public class MainEmptyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_empty);
+        SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(this);
+//        SharedPreferences.Editor editor = a.edit();
+//        editor.putBoolean("logged", true);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS)) {
@@ -47,7 +52,8 @@ public class MainEmptyActivity extends AppCompatActivity {
         }
 
         Intent activityIntent;
-        boolean logged = false;
+        //int i = a.getInt("i", 0);
+        boolean logged = a.getBoolean("logged", false);
         // go straight to main if a token is stored
         if (logged) {
             activityIntent = new Intent(this, MainActivity.class);

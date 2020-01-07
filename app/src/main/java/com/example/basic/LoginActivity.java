@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        a = PreferenceManager.getDefaultSharedPreferences(this);
-        activity = this;
+        a = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        //activity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -119,9 +119,10 @@ public class LoginActivity extends AppCompatActivity {
                         //Log.e("hi");
                         if (stayButton.isChecked()) {
                             //stayButton.setChecked(false);
-                            SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(activity);
+                            //SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(activity);
                             SharedPreferences.Editor editor = a.edit();
                             editor.putBoolean("logged", true);
+                            editor.apply();
 
                         }
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -202,9 +203,10 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
                             if (stayButton.isChecked()) {
                                     //stayButton.setChecked(false);
-                                    SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(activity);
+                                    //SharedPreferences a = PreferenceManager.getDefaultSharedPreferences(activity);
                                     SharedPreferences.Editor editor = a.edit();
                                     editor.putBoolean("logged", true);
+                                    editor.apply();
 
                             }
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
