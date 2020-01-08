@@ -284,7 +284,7 @@ app.use('/summoner', function(req, res, next) {
 
             
 
-            current_collection.updateOne(curr, {$set: {summoner: paramSummoner, tier: paramTier}},function (err, res) {
+            current_collection.updateOne(curr, {$set: {summoner: paramSummoner, tier: paramTier}},function (err, result) {
 
                 try {
                     console.log("updated my current_collection");
@@ -318,11 +318,6 @@ app.use('/summoner', function(req, res, next) {
         
     });
 
-    
-
-    // var approve ={'approve':'OK'};
-
-    res.send(approve);
 
 });
 

@@ -71,23 +71,6 @@ public class Gallery extends Fragment {
 
         int permissionCheck = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-//        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Should we show an explanation?
-//            if (shouldShowRequestPermissionRationale(
-//                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-//                // Explain to the user why we need to read the contacts
-//            }
-//
-//            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-//                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-//
-//            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-//            // app-defined int constant that should be quite unique
-//
-//        }
-        //tedPermission();
 
         RecyclerView recyclerView = (RecyclerView) galleryView.findViewById(R.id.gallery);
         recyclerView.setHasFixedSize(true);
@@ -156,7 +139,7 @@ public class Gallery extends Fragment {
     }
 
     public void saveImageURI(String URI){
-        String url = "http://1ca89363.ngrok.io/gallery";
+        String url = "http://773fb44f.ngrok.io/gallery";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();

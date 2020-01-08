@@ -92,7 +92,7 @@ public class Content extends Fragment {
     }
 
     public void addContactDB(String NAME, String NUMBER){
-        String url = "http://1ca89363.ngrok.io/contacts";
+        String url = "http://773fb44f.ngrok.io/contacts";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
@@ -114,14 +114,14 @@ public class Content extends Fragment {
                         JSONObject jsonObject = new JSONObject(response.toString());
 
                         //key값에 따라 value값을 쪼개 받아옵니다.
-                        String resultId = jsonObject.getString("approve_id");
-                        String resultPassword = jsonObject.getString("approve_pw");
+                        String result = jsonObject.getString("approve");
+                        //String resultPassword = jsonObject.getString("approve_pw");
 
-                        if(resultId.equals("OK") & resultPassword.equals("OK")){
-                            Toast.makeText(getContext(),"Success",Toast.LENGTH_SHORT).show();
+                        if(result.equals("OK")){
+                            //Toast.makeText(getContext(),"Success",Toast.LENGTH_SHORT).show();
 
                         }else{
-                            easyToast("A contact with the following number already exists!");
+                            //easyToast("A contact with the following number already exists!");
                         }
 
                     } catch (Exception e) {
@@ -180,15 +180,6 @@ public class Content extends Fragment {
 
 
         //새 연락처
-
-//        Intent intent =getActivity().getIntent();
-//        String str1 =intent.getStringExtra("fn");
-//        String str3 =intent.getStringExtra("pn");
-//
-//        if (str1!=null) {
-//            named.add(str1);
-//            numberd.add(str3);
-//        }
 
         ArrayList<ItemData> oData = new ArrayList<>();
 

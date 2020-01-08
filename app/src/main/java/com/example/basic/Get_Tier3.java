@@ -27,7 +27,7 @@ public class Get_Tier3 {
     }
 
     public String AsyncExample(String summoner) throws RiotApiException {
-        ApiConfig config = new ApiConfig().setKey("RGAPI-73b2c288-e457-425e-9600-2579688db1ff");
+        ApiConfig config = new ApiConfig().setKey("RGAPI-90d832a2-d6b2-4b27-a7b2-101fa62e92f6");
         RiotApi api = new RiotApi(config);
 
 

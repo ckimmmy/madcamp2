@@ -74,22 +74,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-//        try {
-//            PackageInfo info = getPackageManager().getPackageInfo(
-//                    getPackageName(),  //Or replace to your package name directly, instead getPackageName()  "com.your.app"
-//                    PackageManager.GET_SIGNATURES);
-//
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//
-//                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
-//
-//        }
-
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList(EMAIL));
 
@@ -174,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void requestLogin(String ID, String PW){
-        String url = "http://1ca89363.ngrok.io/login";
+        String url = "http://773fb44f.ngrok.io/login";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
@@ -213,10 +197,12 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }else{
+                            Toast.makeText(getApplicationContext(),"로그인 실패",Toast.LENGTH_SHORT).show();
                             easyToast("로그인 실패");
                         }
 
                     } catch (Exception e) {
+                        easyToast("로그인 실패");
                         e.printStackTrace();
                     }
                 }

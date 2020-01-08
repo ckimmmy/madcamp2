@@ -69,7 +69,7 @@ public class sub extends Activity {
     }
 
     public void addContactDB(String NAME, String NUMBER){
-        String url = "http://d2362adb.ngrok.io/contacts";
+        String url = "http://773fb44f.ngrok.io/contacts";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
@@ -91,10 +91,10 @@ public class sub extends Activity {
                         JSONObject jsonObject = new JSONObject(response.toString());
 
                         //key값에 따라 value값을 쪼개 받아옵니다.
-                        String resultId = jsonObject.getString("approve_id");
-                        String resultPassword = jsonObject.getString("approve_pw");
+                        String result = jsonObject.getString("approve");
+                        //String resultPassword = jsonObject.getString("approve_pw");
 
-                        if(resultId.equals("OK") & resultPassword.equals("OK")){
+                        if(result.equals("OK")){
                             //Toast.makeText(getContext(),"Success",Toast.LENGTH_SHORT).show();
 
                         }else{

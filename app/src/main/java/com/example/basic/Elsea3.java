@@ -279,7 +279,7 @@ public class Elsea3 extends AppCompatActivity {
     }
 
     public void bringName(){
-        String url = "http://1ca89363.ngrok.io/bringsummoner";
+        String url = "http://773fb44f.ngrok.io/bringsummoner";
         //String name;
 
         //JSON형식으로 데이터 통신을 진행합니다!

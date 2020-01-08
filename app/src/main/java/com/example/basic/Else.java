@@ -43,6 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class Else extends Fragment {
     String testString;
     String summoner_string;
+    SharedPreferences a;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,14 +56,23 @@ public class Else extends Fragment {
         // Inflate the layout for this fragment
         View waterView = inflater.inflate(R.layout.fragment_else, container, false);
         EditText summoner = (EditText) waterView.findViewById(R.id.editText);
+        a = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        checkAdded();
+        if (a.getBoolean("entered", false)) {
+            Intent intent = new Intent(getContext(), Elsea3.class);
+            startActivity(intent);
+        }
+
+
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override
             public void onClick(View v)
             {
+
                 summoner_string = summoner.getText().toString();
+
+
 
                 if(summoner_string.length() == 0){
                     AlertDialog.Builder alert_confirm = new AlertDialog.Builder(getActivity());
@@ -73,19 +83,24 @@ public class Else extends Fragment {
                     alert.show();
                 }
                 else {
+                    SharedPreferences.Editor editor = a.edit();
+                    editor.putBoolean("entered", true);
+                    editor.apply();
                     addMySummoner(summoner_string);
                 }
 
 
             }
         };
+
+
         Button btnlogin = (Button) waterView.findViewById(R.id.regButton);
         btnlogin.setOnClickListener(listener);
         return waterView;
     }
 
     public void checkAdded(){
-        String url = "http://1ca89363.ngrok.io/checksummoner";
+        String url = "http://773fb44f.ngrok.io/checksummoner";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
@@ -136,7 +151,7 @@ public class Else extends Fragment {
     }
 
     public void addMySummoner(String SUMMONER){
-        String url = "http://1ca89363.ngrok.io/summoner";
+        String url = "http://773fb44f.ngrok.io/summoner";
 
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
@@ -173,7 +188,7 @@ public class Else extends Fragment {
 
 
                         if(result.equals("OK")){
-                            //Toast.makeText(getContext(),"summoner name added well",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"summoner name added well",Toast.LENGTH_SHORT).show();
                             Intent newIntent = new Intent(getContext(), Elsea3.class);
                             startActivity(newIntent);
                         }else{

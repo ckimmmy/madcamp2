@@ -53,7 +53,6 @@
         <activity android:name=".FullScreenImageActivity" />
         <activity android:name=".Gallery" />
         <activity android:name=".Else" />
-        <activity android:name=".Else3" />
         <activity android:name=".Elsea3" />
         <activity android:name=".sub" />
         <activity android:name=".SignupActivity" />

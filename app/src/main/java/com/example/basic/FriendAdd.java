@@ -79,8 +79,9 @@ public class FriendAdd extends Activity {
     }
 
     public void addFriend(String name, String summoner){
-        String url = "http://1ca89363.ngrok.io/addfriend";
+        String url = "http://773fb44f.ngrok.io/addfriend";
 
+        //JSON형식으로 데이터 통신을 진행합니다!
         //JSON형식으로 데이터 통신을 진행합니다!
         JSONObject testjson = new JSONObject();
         try {
